@@ -1,0 +1,198 @@
+/* Admin Layout */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #1a1a2e;
+  padding: 24px 0;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+.sidebar nav a {
+  display: block;
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Main Content */
+.admin-main {
+  margin-left: 220px;
+  flex: 1;
+  padding: 32px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.admin-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+.admin-header span {
+  color: #888;
+  font-size: 14px;
+}
+
+/* Metric Cards */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.metric-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-left: 3px solid #222;
+}
+.metric-label {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+}
+.metric-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* Section */
+.admin-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+.admin-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+/* Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.admin-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #888;
+  font-weight: 500;
+  border-bottom: 1px solid #f0f0f0;
+}
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f8f8f8;
+  color: #333;
+}
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+.admin-table tr:hover td {
+  background: #fafafa;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+.badge-paid {
+  background: #d1e7dd;
+  color: #0a5c36;
+}
+.badge-shipping {
+  background: #cfe2ff;
+  color: #084298;
+}
+.badge-done {
+  background: #e2e3e5;
+  color: #41464b;
+}
+
+/* Admin Form */
+.admin-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.admin-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.admin-form label {
+  font-size: 13px;
+  color: #888;
+}
+.admin-form input,
+.admin-form select {
+  padding: 10px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+.admin-form input:focus,
+.admin-form select:focus {
+  border-color: #222;
+}
+.admin-form .full-width {
+  grid-column: 1 / -1;
+}
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn-danger:hover {
+  background: #c0392b;
+}
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+}
