@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-    header("Location: /shoe-store/");
+    header("Location: /shoe-store-main/");
     exit;
 }
 
@@ -22,12 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_name'] = $user['full_name'];
         $_SESSION['user_role'] = $user['role'];
 
-        // Nếu là admin thì vào admin dashboard
         if ($user['role'] === 'admin') {
             $_SESSION['admin_logged_in'] = true;
-            header("Location: /shoe-store/admin/");
+            header("Location: /shoe-store-main/admin/");
         } else {
-            header("Location: /shoe-store/");
+            header("Location: /shoe-store-main/");
         }
         exit;
     } else {
@@ -40,40 +39,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login – Shoe Store</title>
-    <link rel="stylesheet" href="/shoe-store/assets/css/style.css">
+    <link rel="stylesheet" href="/shoe-store-main/assets/css/style.css?v=2">
 </head>
-<body style="background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;">
-    <div style="background:#fff;border-radius:16px;padding:40px;width:380px;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-        <div style="text-align:center;margin-bottom:28px;">
-            <div style="font-size:40px;margin-bottom:8px;">👟</div>
-            <h1 style="font-size:22px;font-weight:600;">Welcome back</h1>
-            <p style="color:#888;font-size:14px;margin-top:4px;">Sign in to your account</p>
-        </div>
+<body class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">SOLE<span style="color:var(--gold)">.</span>STORE</div>
+        <div class="auth-sub">Welcome back — Sign in to your account</div>
 
         <?php if ($error): ?>
-        <div style="background:#fee;border:1px solid #fcc;color:#c00;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;">
-            ⚠ <?= $error ?>
-        </div>
+        <div class="auth-error">⚠ <?= $error ?></div>
         <?php endif; ?>
 
         <form method="POST">
             <div class="form-group">
-                <label style="font-size:13px;color:#888;display:block;margin-bottom:6px;">Email</label>
+                <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-input" placeholder="your@email.com" required autofocus>
             </div>
             <div class="form-group">
-                <label style="font-size:13px;color:#888;display:block;margin-bottom:6px;">Password</label>
+                <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-input" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn" style="width:100%;padding:12px;font-size:15px;margin-top:8px;">
+            <button type="submit" class="btn" style="width:100%;padding:12px;font-size:13px;margin-top:8px;">
                 Sign In →
             </button>
         </form>
 
-        <p style="text-align:center;margin-top:20px;font-size:14px;color:#888;">
-            Don't have an account? 
-            <a href="/shoe-store/register.php" style="color:#222;font-weight:500;">Register</a>
-        </p>
+        <div class="auth-footer">
+            Don't have an account?
+            <a href="/shoe-store-main/register.php">Register</a>
+        </div>
     </div>
 </body>
 </html>

@@ -3,13 +3,11 @@ session_start();
 require_once 'includes/db.php';
 require_once 'includes/header.php';
 
-// Nếu giỏ hàng trống thì redirect về trang chủ
 if (empty($_SESSION['cart'])) {
-    header("Location: /shoe-store/");
+    header("Location: /shoe-store-main/");
     exit;
 }
 
-// Lấy thông tin sản phẩm trong giỏ
 $cart = $_SESSION['cart'];
 $ids = implode(',', array_map('intval', array_keys($cart)));
 $stmt = $pdo->query("SELECT * FROM products WHERE id IN ($ids)");
@@ -20,79 +18,68 @@ foreach ($products as $p) {
     $total += $p['price'] * $cart[$p['id']];
 }
 
-// Xử lý đặt hàng
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name    = htmlspecialchars($_POST['name']);
     $phone   = htmlspecialchars($_POST['phone']);
     $address = htmlspecialchars($_POST['address']);
 
-    // Tạo đơn hàng
     $stmt = $pdo->prepare("INSERT INTO orders (customer_name, phone, address, total, status) VALUES (?, ?, ?, ?, 'pending')");
     $stmt->execute([$name, $phone, $address, $total]);
     $order_id = $pdo->lastInsertId();
 
-    // Lưu chi tiết đơn hàng + trừ kho
     foreach ($products as $p) {
         $qty = $cart[$p['id']];
         $stmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
         $stmt->execute([$order_id, $p['id'], $qty, $p['price']]);
-
-        // Trừ tồn kho (Data Integration)
         $stmt = $pdo->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
         $stmt->execute([$qty, $p['id']]);
     }
 
-    // Lưu session order_id để VNPay dùng
     $_SESSION['order_id'] = $order_id;
     $_SESSION['order_total'] = $total;
 
-    // Redirect sang VNPay
-    header("Location: /shoe-store/api/vnpay.php");
+    header("Location: /shoe-store-main/api/vnpay.php");
     exit;
 }
 ?>
 
-<div class="container">
-    <h2 style="margin-bottom:24px;">Thanh toán</h2>
+<div class="page-wrap">
+    <a href="/shoe-store-main/cart.php" class="back-link">← Back to Cart</a>
+    <h1 class="page-title">Checkout</h1>
     <div class="checkout-grid">
-
-        <!-- Form thông tin -->
         <div class="checkout-form">
-            <h3 style="margin-bottom:20px;">Thông tin giao hàng</h3>
+            <h3 style="font-family:var(--font-display);font-size:24px;letter-spacing:1px;margin-bottom:24px;">Shipping Information</h3>
             <form method="POST">
                 <div class="form-group">
-                    <label>Họ tên</label>
-                    <input type="text" name="name" placeholder="Nguyễn Văn A" required>
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-input" placeholder="Nguyen Van A" required>
                 </div>
                 <div class="form-group">
-                    <label>Số điện thoại</label>
-                    <input type="text" name="phone" placeholder="0901234567" required>
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" name="phone" class="form-input" placeholder="0901234567" required>
                 </div>
                 <div class="form-group">
-                    <label>Địa chỉ giao hàng</label>
-                    <textarea name="address" rows="3" placeholder="Số nhà, đường, phường, quận, tỉnh..." required></textarea>
+                    <label class="form-label">Delivery Address</label>
+                    <textarea name="address" class="form-input" rows="3" placeholder="House number, street, ward, district, city..." required style="resize:vertical"></textarea>
                 </div>
-                <button type="submit" class="btn" style="width:100%;padding:14px;font-size:16px;">
-                    Thanh toán qua VNPay →
+                <button type="submit" class="btn-primary" style="width:100%;padding:16px;font-size:14px;margin-top:8px;">
+                    Pay via VNPay →
                 </button>
             </form>
         </div>
-
-        <!-- Tóm tắt đơn hàng -->
         <div class="order-summary">
-            <h3 style="margin-bottom:20px;">Đơn hàng của bạn</h3>
+            <h3 style="font-family:var(--font-display);font-size:24px;letter-spacing:1px;margin-bottom:24px;">Order Summary</h3>
             <?php foreach ($products as $p): ?>
             <div class="summary-item">
                 <span><?= htmlspecialchars($p['name']) ?> x<?= $cart[$p['id']] ?></span>
-                <span><?= number_format($p['price'] * $cart[$p['id']], 0, ',', '.') ?> đ</span>
+                <span><?= number_format($p['price'] * $cart[$p['id']], 0, ',', '.') ?>đ</span>
             </div>
             <?php endforeach; ?>
             <div class="summary-total">
-                <span>Tổng cộng</span>
-                <strong><?= number_format($total, 0, ',', '.') ?> đ</strong>
+                <span>Total</span>
+                <strong><?= number_format($total, 0, ',', '.') ?>đ</strong>
             </div>
         </div>
-
     </div>
 </div>
 
